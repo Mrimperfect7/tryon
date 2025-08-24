@@ -1,728 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>VTO — Virtual Try-On System</title>
-<meta name="description" content="Virtual Try-On website template with animations, upload, editor, and before/after slider." />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Virtual Try-On Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --bg: #0b0f17;
-    --panel: #101726;
-    --ink: #eaf2ff;
-    --muted: #a8b3c7;
-    --prime: #7ae2ff;
-    --accent: #ff73c6;
-    --ok: #6dffb8;
-    --warn: #ffd36e;
-    --danger:#ff6b6b;
-    --glow: 0 0 24px rgba(122,226,255,.35), 0 0 64px rgba(255,115,198,.25);
-    --radius: 16px;
-    --radius-sm: 12px;
-    --radius-lg: 28px;
-    --shadow: 0 10px 30px rgba(0,0,0,.35);
-    --grad: radial-gradient(1200px 600px at 10% 0%, rgba(122,226,255,.12), transparent 60%),
-            radial-gradient(900px 600px at 100% 40%, rgba(255,115,198,.10), transparent 60%),
-            linear-gradient(180deg, #0b0f17, #0b0f17);
+  body {
+    margin: 0; font-family: 'Poppins', sans-serif;
+    background: #0b0f17; color: #fff; overflow-x: hidden;
   }
-
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0; font-family:Outfit,system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,"Helvetica Neue",Arial;
-    color:var(--ink); background:var(--grad), var(--bg); overflow-x:hidden;
+  header {
+    text-align: center; padding: 20px;
+    font-size: 1.5rem; font-weight: 600;
+    background: rgba(0,0,0,0.4); position: sticky; top:0;
   }
-  a{color:inherit; text-decoration:none}
-  .container{width:min(1200px,92vw); margin-inline:auto}
-
-  /* Header */
-  header{
-    position:sticky; top:0; z-index:40;
-    backdrop-filter: blur(10px);
-    background:linear-gradient(180deg, rgba(16,23,38,.7), rgba(16,23,38,.35));
-    border-bottom:1px solid rgba(122,226,255,.15);
+  .hero {
+    position: relative; text-align: center; padding: 50px 20px;
+    overflow: hidden;
   }
-  .nav{
-    display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0;
-  }
-  .brand{display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.5px}
-  .logo{
-    width:36px; height:36px; border-radius:50%; display:grid; place-items:center;
-    background:conic-gradient(from 0deg, var(--prime), var(--accent), var(--prime));
-    box-shadow:var(--glow);
-  }
-  .nav a.btn{
-    padding:10px 16px; border-radius:999px; border:1px solid rgba(122,226,255,.3);
-    background:linear-gradient(180deg, rgba(122,226,255,.12), rgba(122,226,255,.04));
-    transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
-  }
-  .nav a.btn:hover{ transform:translateY(-2px); box-shadow:var(--glow); }
-  .pill{
-    display:inline-flex; align-items:center; gap:8px;
-    padding:8px 12px; border-radius:999px; font-size:.9rem; color:var(--prime);
-    border:1px solid rgba(122,226,255,.35); background:rgba(122,226,255,.06)
-  }
-
-  /* Hero */
-  .hero{
-    position:relative; overflow:clip;
-    display:grid; place-items:center; padding:72px 0 28px;
-  }
-  .hero .inner{display:grid; gap:26px; text-align:center}
-  h1{
-    font-size:clamp(2rem, 4vw + 1rem, 4.2rem);
-    line-height:1.05; margin:0; letter-spacing:.3px;
-    text-shadow:0 10px 40px rgba(0,0,0,.35);
-  }
-  .sub{
-    color:var(--muted); font-size:clamp(1rem, 1vw + .6rem, 1.25rem); margin:0 auto; max-width:900px
-  }
-  .cta{
-    display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin-top:8px
-  }
-  .btn{
-    border:1px solid rgba(122,226,255,.3);
-    background:linear-gradient(180deg, rgba(122,226,255,.12), rgba(122,226,255,.04));
-    padding:14px 20px; border-radius:14px; cursor:pointer; color:var(--ink);
-    font-weight:600; letter-spacing:.2px; box-shadow:var(--shadow); transition:transform .2s ease, box-shadow .2s ease, background .2s ease;
-  }
-  .btn:hover{ box-shadow:var(--glow); transform:translateY(-3px) }
-  .btn.primary{ background:linear-gradient(180deg, rgba(122,226,255,.25), rgba(122,226,255,.08)); border-color:rgba(122,226,255,.6)}
-  .btn.accent{ background:linear-gradient(180deg, rgba(255,115,198,.22), rgba(255,115,198,.06)); border-color:rgba(255,115,198,.5)}
-
-  /* Floating fashion particles */
-  .particles{ position:absolute; inset:0; pointer-events:none; overflow:hidden; }
-  .particle{
-    position:absolute; opacity:.9; filter:drop-shadow(0 10px 20px rgba(0,0,0,.5));
-    animation: float var(--dur) var(--delay) infinite ease-in-out alternate;
+  .hero h1 { font-size: 2rem; margin-bottom: 10px }
+  .particles { position:absolute; inset:0; pointer-events:none; overflow:hidden }
+  .particle {
+    position:absolute; opacity:.85;
+    animation: float var(--dur) infinite ease-in-out alternate;
     will-change: transform;
   }
-  @keyframes float{
-    0%{ transform: translateY(0) rotate(0deg) }
-    100%{ transform: translateY(-40px) rotate(6deg) }
+  @keyframes float {
+    from { transform:translateY(0) rotate(0) }
+    to   { transform:translateY(-40px) rotate(8deg) }
   }
 
-  /* Sections */
-  section{ padding:64px 0 }
-  h2{ font-size:clamp(1.6rem, 2.2vw + 1rem, 2.6rem); margin:0 0 22px }
-  .muted{ color:var(--muted) }
-  .grid{
-    display:grid; gap:20px;
-    grid-template-columns: repeat(12, 1fr);
+  .drop {
+    margin:20px auto; max-width:500px; padding:20px;
+    border:2px dashed #7ae2ff; border-radius:16px;
+    text-align:center; cursor:pointer; background:rgba(122,226,255,.05);
   }
-  .card{
-    background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
-    border:1px solid rgba(122,226,255,.12); border-radius:var(--radius);
-    padding:18px; box-shadow:var(--shadow); backdrop-filter: blur(4px);
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  .drop input { display:none }
+  .stage {
+    position:relative; margin:20px auto; max-width:500px;
+    border:1px solid rgba(122,226,255,.3); border-radius:16px;
+    background:#111; min-height:320px; overflow:hidden;
   }
-  .card:hover{ transform:translateY(-4px); box-shadow:var(--glow); border-color:rgba(122,226,255,.35) }
-
-  /* Features */
-  .features .card{ display:flex; align-items:flex-start; gap:14px; }
-  .icon{
-    width:42px; min-width:42px; height:42px; border-radius:12px;
-    display:grid; place-items:center;
-    background:linear-gradient(180deg, rgba(122,226,255,.15), rgba(122,226,255,.05));
-    border:1px solid rgba(122,226,255,.32)
+  .stage img.base { width:100%; height:auto; display:block }
+  .overlay {
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:150px; cursor:grab; user-select:none;
   }
-
-  /* Upload + Editor */
-  .tool{
-    grid-column: span 12;
-    display:grid; gap:18px;
+  .overlay:active { cursor:grabbing }
+  .overlay img { width:100%; display:block; pointer-events:none }
+  .toolbar { text-align:center; margin:15px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center }
+  .btn {
+    background:#222; border:1px solid #7ae2ff; border-radius:8px;
+    padding:8px 12px; color:#fff; cursor:pointer; font-size:.9rem;
   }
-  .drop{
-    border:2px dashed rgba(122,226,255,.35); border-radius:var(--radius-lg);
-    padding:18px; text-align:center; transition: border-color .2s ease, background .2s ease;
-    background:linear-gradient(180deg, rgba(122,226,255,.06), rgba(255,115,198,.03));
+  .btn:hover { background:#7ae2ff; color:#000 }
+  input[type=range] { width:140px }
+  @media (max-width:600px){
+    h1{ font-size:1.5rem }
+    .overlay{ width:120px }
   }
-  .drop.dragover{ border-color:var(--ok); background:linear-gradient(180deg, rgba(109,255,184,.15), rgba(122,226,255,.06)) }
-  .drop input{ display:none }
-  .preview-wrap{
-    display:grid; gap:12px;
-    grid-template-columns: 1fr;
-  }
-  .stage{
-    position:relative; background:#0b0f17; border:1px solid rgba(122,226,255,.15);
-    border-radius:var(--radius); min-height:360px; overflow:hidden;
-  }
-  .stage img.base{ width:100%; height:100%; object-fit:contain; display:block }
-  .overlay{
-    position:absolute; left:50%; top:40%; transform:translate(-50%,-50%);
-    width:220px; user-select:none; cursor:grab;
-    border:1px dashed rgba(255,255,255,.1); border-radius:12px; padding:4px;
-    transition: box-shadow .2s ease;
-  }
-  .overlay:active{ cursor:grabbing }
-  .overlay img{ width:100%; height:auto; display:block; pointer-events:none }
-  .handles{ position:absolute; inset:0; }
-  .handle{
-    position:absolute; width:14px; height:14px; border-radius:50%; border:2px solid #fff; background:rgba(122,226,255,.9);
-    box-shadow:0 0 0 3px rgba(122,226,255,.25); cursor:nwse-resize;
-  }
-  .handle.br{ right:-8px; bottom:-8px }
-  .toolbar{
-    display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:center
-  }
-  .toolbar .btn{ padding:10px 14px }
-  .toolbar input[type="range"]{ width:180px }
-  .layer-tip{ font-size:.9rem; color:var(--muted) }
-
-  /* Before/After slider */
-  .compare{
-    position:relative; border-radius:var(--radius); overflow:hidden; border:1px solid rgba(122,226,255,.15)
-  }
-  .compare img{ width:100%; display:block; }
-  .after{
-    position:absolute; inset:0; clip-path: inset(0 50% 0 0); transition: clip-path .1s linear;
-  }
-  .slider{ width:100%; margin-top:10px }
-
-  /* Counters */
-  .kpi{
-    display:flex; gap:16px; flex-wrap:wrap; justify-content:center
-  }
-  .kpi .card{ text-align:center; min-width:180px }
-
-  /* Testimonials */
-  .quote{ font-size:1.05rem; color:var(--muted) }
-  .avatar{ width:44px; height:44px; border-radius:50%; background:linear-gradient(180deg, rgba(255,255,255,.2), rgba(255,255,255,.1)); display:inline-block; margin-right:10px }
-
-  /* Pricing */
-  .pricing .card{ padding:22px }
-  .price{ font-size:2rem; font-weight:800 }
-  .badge{ font-size:.85rem; color:var(--ok) }
-
-  /* FAQ */
-  .faq details{
-    background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.02));
-    border:1px solid rgba(122,226,255,.12); border-radius:12px; padding:12px 14px;
-  }
-  .faq details[open]{ border-color:rgba(122,226,255,.3) }
-  .faq summary{ cursor:pointer; font-weight:600 }
-  .faq p{ color:var(--muted) }
-
-  /* Footer */
-  footer{
-    border-top:1px solid rgba(122,226,255,.15); padding:30px 0; color:var(--muted); text-align:center
-  }
-
-  /* Reduced motion */
-  @media (prefers-reduced-motion: reduce){
-    .particle{ animation:none }
-    .btn, .card{ transition:none }
-  }
-
 </style>
 </head>
 <body>
 
-<header>
-  <div class="container nav">
-    <div class="brand">
-      <span class="logo" aria-hidden="true"></span>
-      <span>VTO<span style="color:var(--prime)">Lab</span></span>
-    </div>
-    <nav style="display:flex; gap:10px; align-items:center">
-      <a href="#features" class="btn">Features</a>
-      <a href="#tool" class="btn">Try Demo</a>
-      <a href="#pricing" class="btn">Pricing</a>
-      <a href="#contact" class="btn primary">Get Started</a>
-    </nav>
-  </div>
-</header>
+<header>👗 Virtual Try-On System</header>
 
-<!-- HERO -->
 <section class="hero">
-  <div class="container inner">
-    <span class="pill">✨ Virtual Try-On Template • Web-Ready</span>
-    <h1>Try outfits, shoes, and glasses—<span style="color:var(--prime)">instantly</span>.</h1>
-    <p class="sub">A modern, animated template for fashion e-commerce and research teams. Drag &amp; drop a photo, place a transparent PNG asset, and preview the fit with smooth controls. Wire it to your ML model or AR pipeline when you’re ready.</p>
-    <div class="cta">
-      <a class="btn primary" href="#tool">Launch Demo</a>
-      <a class="btn accent" href="#compare">See Before/After</a>
-    </div>
-  </div>
-
-  <!-- Fashion particle field -->
-  <div class="particles" aria-hidden="true" id="particles"></div>
+  <h1>Upload & Try Fashion Items</h1>
+  <p>Works on desktop 💻 and mobile 📱</p>
+  <div class="particles" id="particles"></div>
 </section>
 
-<!-- FEATURES -->
-<section id="features">
-  <div class="container">
-    <h2>Built for real try-on workflows</h2>
-    <div class="grid">
-      <div class="card features" style="grid-column:span 4">
-        <div class="icon">👗</div>
-        <div>
-          <h3>Transparent PNG Layers</h3>
-          <p class="muted">Drop in glasses, shirts, shoes as PNG overlays. Drag, resize, flip, and adjust opacity.</p>
-        </div>
-      </div>
-      <div class="card features" style="grid-column:span 4">
-        <div class="icon">⚡</div>
-        <div>
-          <h3>Smooth Animations</h3>
-          <p class="muted">Neon UI with float, glow, and scroll reveals. Respectful to reduced-motion settings.</p>
-        </div>
-      </div>
-      <div class="card features" style="grid-column:span 4">
-        <div class="icon">🧠</div>
-        <div>
-          <h3>ML/AR Ready</h3>
-          <p class="muted">Hook upload to your segmentation / pose / garment warping API. Try AR via WebXR.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="drop" id="drop">
+  <input type="file" id="file" accept="image/*">
+  <p><strong>Click or Drag & Drop</strong> a photo here</p>
+</div>
 
-<!-- TOOL: UPLOAD + EDITOR -->
-<section id="tool">
-  <div class="container">
-    <h2>Try-On Demo</h2>
-    <p class="muted">1) Upload a selfie/product photo • 2) Add an overlay (e.g., glasses) • 3) Adjust fit • 4) Compare &amp; export.</p>
+<div class="stage" id="stage">
+  <img class="base" id="base" alt="">
+</div>
 
-    <div class="grid">
-      <div class="tool">
-        <div class="drop" id="drop">
-          <input id="file" type="file" accept="image/*" />
-          <p><strong>Drag &amp; drop</strong> an image here or <label for="file" style="text-decoration:underline; cursor:pointer">browse</label></p>
-          <p class="muted" id="fileHint">Max 8 MB • JPG/PNG/WebP • Landscape works best</p>
-        </div>
-
-        <div class="preview-wrap">
-          <div class="stage" id="stage" aria-live="polite">
-            <img class="base" id="base" alt="Your uploaded image will appear here" src="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' width='1200' height='700'><rect width='100%' height='100%' fill='%230b0f17'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23a8b3c7' font-family='Outfit, Arial' font-size='26'>Upload a photo to start</text></svg>">
-            <!-- Overlay demo (glasses). Replace with your assets -->
-            <div class="overlay" id="overlay" aria-label="Overlay item" hidden>
-              <img id="ovImg" alt="Overlay element (e.g., glasses)" src="https://images.unsplash.com/photo-1542219550-3814c5d0d8f7?q=80&w=800&auto=format&fit=crop">
-              <div class="handles"><span class="handle br" id="handleBR" title="Resize"></span></div>
-            </div>
-          </div>
-
-          <div class="toolbar">
-            <button class="btn" id="btnGlasses">+ Glasses</button>
-            <button class="btn" id="btnFlip">Flip</button>
-            <label>Opacity <input type="range" id="opacity" min="20" max="100" value="100"></label>
-            <button class="btn" id="btnFront">Bring Front</button>
-            <button class="btn" id="btnBack">Send Back</button>
-            <button class="btn" id="btnReset">Reset</button>
-            <button class="btn accent" id="btnExport">Export PNG</button>
-            <button class="btn primary" id="btnAR">Try AR</button>
-          </div>
-          <p class="layer-tip">Tip: Add multiple overlays by clicking <em>+ Glasses</em> again. Drag to move; corner handle to resize.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- COMPARE -->
-<section id="compare">
-  <div class="container">
-    <h2>Before / After</h2>
-    <div class="compare" id="compareBox">
-      <img id="beforeImg" src="https://images.unsplash.com/photo-1518709766631-a6a7f45921c3?q=80&w=1400&auto=format&fit=crop" alt="Before">
-      <img class="after" id="afterImg" src="https://images.unsplash.com/photo-1521575107034-e0fa0b594529?q=80&w=1400&auto=format&fit=crop" alt="After (try-on)">
-    </div>
-    <input class="slider" type="range" id="compareRange" min="0" max="100" value="50" aria-label="Reveal After %">
-  </div>
-</section>
-
-<!-- KPIs -->
-<section>
-  <div class="container">
-    <div class="kpi">
-      <div class="card"><div class="muted">Load time</div><div class="price" id="k1">0.9s</div></div>
-      <div class="card"><div class="muted">Overlay latency</div><div class="price" id="k2">12ms</div></div>
-      <div class="card"><div class="muted">Export quality</div><div class="price" id="k3">4K</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section>
-  <div class="container">
-    <h2>Loved by shoppers &amp; teams</h2>
-    <div class="grid">
-      <div class="card" style="grid-column:span 6">
-        <span class="avatar"></span>
-        <span><strong>Aisha</strong> · D2C Founder</span>
-        <p class="quote">“The template saved our launch. We swapped in our garments and connected our API in a weekend.”</p>
-      </div>
-      <div class="card" style="grid-column:span 6">
-        <span class="avatar"></span>
-        <span><strong>Rahul</strong> · ML Engineer</span>
-        <p class="quote">“Clean canvas for segmentation and garment warping—UI/UX is already production-grade.”</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section id="pricing" class="pricing">
-  <div class="container">
-    <h2>Simple pricing</h2>
-    <div class="grid">
-      <div class="card" style="grid-column:span 4">
-        <div class="badge">Starter</div>
-        <div class="price">Free</div>
-        <p class="muted">Prototype your try-on flow.</p>
-        <ul>
-          <li>Upload &amp; overlay</li>
-          <li>Export PNG</li>
-          <li>Before/After slider</li>
-        </ul>
-        <button class="btn primary" onclick="window.location.hash='#tool'">Use Starter</button>
-      </div>
-      <div class="card" style="grid-column:span 4; outline:2px solid rgba(122,226,255,.3)">
-        <div class="badge">Pro</div>
-        <div class="price">₹999 / mo</div>
-        <p class="muted">For small shops.</p>
-        <ul>
-          <li>Batch processing</li>
-          <li>Brand theming</li>
-          <li>Email support</li>
-        </ul>
-        <button class="btn primary">Start Pro</button>
-      </div>
-      <div class="card" style="grid-column:span 4">
-        <div class="badge">Enterprise</div>
-        <div class="price">Custom</div>
-        <p class="muted">For scale &amp; SLAs.</p>
-        <ul>
-          <li>S3 / CDN integration</li>
-          <li>Role-based access</li>
-          <li>Dedicated support</li>
-        </ul>
-        <button class="btn primary">Talk to Sales</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq">
-  <div class="container">
-    <h2>FAQ</h2>
-    <div class="grid">
-      <div style="grid-column:span 12; display:grid; gap:12px">
-        <details><summary>How do I connect my AI model?</summary><p>Intercept the file in <code>handleFile()</code> and POST to your API. Replace the overlay with your model output or warped garment.</p></details>
-        <details><summary>Does it work on mobile?</summary><p>Yes. It’s responsive and supports touch gestures for dragging and resizing.</p></details>
-        <details><summary>Can I add more overlays?</summary><p>Click “+ Glasses” repeatedly or adapt the button to load your catalog. Each overlay is independent.</p></details>
-        <details><summary>Is there AR?</summary><p>The “Try AR” button demonstrates how you’d branch to a WebXR or native app deep link. Replace the handler with your AR experience.</p></details>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="container card" style="padding:22px">
-    <h2>Need customizations?</h2>
-    <p class="muted">Swap brand colors, plug your API, or add auth/cart. The template is framework-agnostic.</p>
-    <div class="cta">
-      <a class="btn accent">Email Us</a>
-      <a class="btn">Docs</a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  © <span id="yr"></span> VTO Lab • Crafted for modern fashion experiences
-</footer>
-
-<!-- GSAP (for light scroll/entry anims) -->
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<div class="toolbar">
+  <button class="btn" id="addOverlay">+ Glasses</button>
+  <button class="btn" id="flip">Flip</button>
+  <label>Opacity <input type="range" id="opacity" min="20" max="100" value="100"></label>
+  <button class="btn" id="reset">Reset</button>
+</div>
 
 <script>
-  /* UTIL */
-  const $ = sel => document.querySelector(sel);
-  const $$ = sel => Array.from(document.querySelectorAll(sel));
+const particles = document.getElementById("particles");
+const icons = [
+  "👗","👠","🕶️"
+];
+for(let i=0;i<12;i++){
+  let span=document.createElement("span");
+  span.className="particle";
+  span.style.setProperty("--dur",(6+Math.random()*6)+"s");
+  span.style.left=Math.random()*100+"%";
+  span.style.top=10+Math.random()*70+"%";
+  span.style.fontSize=(20+Math.random()*30)+"px";
+  span.textContent=icons[i%icons.length];
+  particles.appendChild(span);
+}
 
-  /* Year */
-  $('#yr').textContent = new Date().getFullYear();
+const drop=document.getElementById("drop");
+const file=document.getElementById("file");
+const base=document.getElementById("base");
+drop.addEventListener("click",()=>file.click());
+file.addEventListener("change",e=>handleFile(e.target.files[0]));
+drop.addEventListener("dragover",e=>{e.preventDefault(); drop.style.background="rgba(122,226,255,.15)"});
+drop.addEventListener("dragleave",()=> drop.style.background="rgba(122,226,255,.05)");
+drop.addEventListener("drop",e=>{
+  e.preventDefault(); drop.style.background="rgba(122,226,255,.05)";
+  handleFile(e.dataTransfer.files[0]);
+});
+function handleFile(f){
+  if(!f) return;
+  let r=new FileReader();
+  r.onload=e=>{ base.src=e.target.result };
+  r.readAsDataURL(f);
+}
 
-  /* Particle Field (floating dress/shoe/glasses) */
-  const particles = $('#particles');
-  const icons = [
-    // simple inline SVGs for crisp scaling
-    `<svg width="80" height="80" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M10 14c10 6 20 6 30 0 2 5 3 10 3 16-8 6-20 6-36 0 0-6 1-11 3-16z" fill="#ff73c6"/>
-      <rect x="6" y="30" width="52" height="26" rx="6" fill="#7ae2ff"/>
-    </svg>`, // dress
-    `<svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M10 44c8-10 22-16 36-10 8 4 12 12 12 20H14c-8 0-8-6-4-10z" fill="#a9ffdc"/>
-      <circle cx="50" cy="48" r="6" fill="#ffffff"/>
-    </svg>`, // shoe
-    `<svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <rect x="8" y="28" width="56" height="16" rx="8" fill="#7ae2ff"/>
-      <circle cx="24" cy="36" r="6" fill="#0b0f17"/><circle cx="48" cy="36" r="6" fill="#0b0f17"/>
-    </svg>` // glasses
-  ];
-  function makeParticle(i){
-    const el = document.createElement('div');
-    el.className = 'particle';
-    el.style.setProperty('--dur', (8 + Math.random()*6)+'s');
-    el.style.setProperty('--delay', (Math.random()>.5? '0s' : '0.4s'));
-    el.style.left = Math.random()*100 + '%';
-    el.style.top = (10 + Math.random()*70) + '%';
-    el.innerHTML = icons[i % icons.length];
-    particles.appendChild(el);
+const stage=document.getElementById("stage");
+const addBtn=document.getElementById("addOverlay");
+const flipBtn=document.getElementById("flip");
+const resetBtn=document.getElementById("reset");
+const opacity=document.getElementById("opacity");
+let current=null;
+
+function addOverlay(){
+  const o=document.createElement("div");
+  o.className="overlay"; o.innerHTML=`<img src="https://i.postimg.cc/15xMtyXY/glasses.png">`;
+  stage.appendChild(o);
+  makeDraggable(o);
+  current=o;
+}
+addBtn.onclick=addOverlay;
+
+flipBtn.onclick=()=>{
+  if(current){
+    const img=current.querySelector("img");
+    img.style.transform=img.style.transform==="scaleX(-1)"?"scaleX(1)":"scaleX(-1)";
   }
-  for (let i=0;i<16;i++) makeParticle(i);
+};
+opacity.oninput=()=>{ if(current) current.style.opacity=opacity.value/100 };
+resetBtn.onclick=()=>{ document.querySelectorAll(".overlay").forEach(o=>o.remove()) };
 
-  /* Scroll reveal */
-  if (window.gsap){
-    gsap.utils.toArray('section .card, section h2').forEach(el=>{
-      gsap.from(el, {
-        opacity:0, y:24, duration:.6, ease:'power2',
-        scrollTrigger:{ trigger: el, start:'top 85%' }
-      });
-    });
+function makeDraggable(el){
+  let startX,startY,origX,origY;
+  function down(e){
+    e.preventDefault();
+    startX=(e.touches?e.touches[0].clientX:e.clientX);
+    startY=(e.touches?e.touches[0].clientY:e.clientY);
+    origX=el.offsetLeft; origY=el.offsetTop;
+    document.addEventListener("mousemove",move);
+    document.addEventListener("mouseup",up);
+    document.addEventListener("touchmove",move,{passive:false});
+    document.addEventListener("touchend",up);
+    current=el;
   }
-
-  /* Drag & Drop Upload */
-  const drop = $('#drop'), fileInput = $('#file'), baseImg = $('#base');
-  const MAX_MB = 8;
-
-  function handleFile(file){
-    if(!file) return;
-    if(file.size > MAX_MB * 1024 * 1024){
-      $('#fileHint').textContent = 'File too large. Max 8 MB.'; $('#fileHint').style.color = 'var(--danger)'; return;
-    }
-    const fr = new FileReader();
-    fr.onload = e => {
-      baseImg.src = e.target.result;
-      // TODO: send to your API here if needed
-    };
-    fr.readAsDataURL(file);
+  function move(e){
+    if(e.touches) e.preventDefault();
+    const x=(e.touches?e.touches[0].clientX:e.clientX);
+    const y=(e.touches?e.touches[0].clientY:e.clientY);
+    el.style.left=origX+(x-startX)+"px";
+    el.style.top=origY+(y-startY)+"px";
+    el.style.transform="translate(0,0)";
   }
-
-  drop.addEventListener('click', ()=> fileInput.click());
-  drop.addEventListener('dragover', e=>{ e.preventDefault(); drop.classList.add('dragover') });
-  drop.addEventListener('dragleave', ()=> drop.classList.remove('dragover'));
-  drop.addEventListener('drop', e=>{
-    e.preventDefault(); drop.classList.remove('dragover');
-    handleFile(e.dataTransfer.files[0]);
-  });
-  fileInput.addEventListener('change', e=> handleFile(e.target.files[0]));
-
-  /* Overlay management (drag, resize, flip, z-order, opacity) */
-  const stage = $('#stage');
-  const addBtn = $('#btnGlasses');
-  const flipBtn = $('#btnFlip');
-  const frontBtn = $('#btnFront');
-  const backBtn = $('#btnBack');
-  const resetBtn = $('#btnReset');
-  const exportBtn = $('#btnExport');
-  const opacityRange = $('#opacity');
-  const arBtn = $('#btnAR');
-
-  let currentOverlay = null;
-
-  function createOverlay(src){
-    const wrap = document.createElement('div');
-    wrap.className = 'overlay';
-    wrap.style.left = '50%'; wrap.style.top = '40%'; wrap.style.transform = 'translate(-50%,-50%)';
-    wrap.innerHTML = `
-      <img alt="Overlay" src="${src}">
-      <div class="handles"><span class="handle br" title="Resize"></span></div>
-    `;
-    stage.appendChild(wrap);
-    wrap.hidden = false;
-
-    // focus newly added
-    selectOverlay(wrap);
-    enableDrag(wrap);
-    enableResize(wrap.querySelector('.handle.br'), wrap);
-    return wrap;
+  function up(){
+    document.removeEventListener("mousemove",move);
+    document.removeEventListener("mouseup",up);
+    document.removeEventListener("touchmove",move);
+    document.removeEventListener("touchend",up);
   }
-
-  function selectOverlay(el){
-    currentOverlay = el;
-    $$('.overlay').forEach(o => o.style.outline = 'none');
-    if(el) el.style.outline = '2px solid rgba(122,226,255,.6)';
-  }
-
-  function enableDrag(el){
-    let startX, startY, rect, left, top;
-    function onDown(e){
-      e.preventDefault();
-      selectOverlay(el);
-      rect = el.getBoundingClientRect();
-      startX = (e.touches? e.touches[0].clientX : e.clientX);
-      startY = (e.touches? e.touches[0].clientY : e.clientY);
-      const sRect = stage.getBoundingClientRect();
-      left = rect.left - sRect.left; top = rect.top - sRect.top;
-      window.addEventListener('mousemove', onMove); window.addEventListener('touchmove', onMove, {passive:false});
-      window.addEventListener('mouseup', onUp); window.addEventListener('touchend', onUp);
-    }
-    function onMove(e){
-      if(e.touches) e.preventDefault();
-      const x = (e.touches? e.touches[0].clientX : e.clientX);
-      const y = (e.touches? e.touches[0].clientY : e.clientY);
-      const dx = x - startX, dy = y - startY;
-      const sRect = stage.getBoundingClientRect();
-      let nx = left + dx, ny = top + dy;
-      // clamp within stage
-      nx = Math.max(-el.offsetWidth*0.4, Math.min(nx, sRect.width - el.offsetWidth*0.6));
-      ny = Math.max(-el.offsetHeight*0.4, Math.min(ny, sRect.height - el.offsetHeight*0.6));
-      el.style.left = nx + 'px'; el.style.top = ny + 'px'; el.style.transform = 'translate(0,0)';
-    }
-    function onUp(){ window.removeEventListener('mousemove', onMove); window.removeEventListener('touchmove', onMove); }
-    el.addEventListener('mousedown', onDown); el.addEventListener('touchstart', onDown, {passive:false});
-  }
-
-  function enableResize(handle, el){
-    let startX, startW;
-    function onDown(e){
-      e.stopPropagation(); e.preventDefault();
-      selectOverlay(el);
-      startX = (e.touches? e.touches[0].clientX : e.clientX);
-      startW = el.offsetWidth;
-      window.addEventListener('mousemove', onMove); window.addEventListener('touchmove', onMove, {passive:false});
-      window.addEventListener('mouseup', onUp); window.addEventListener('touchend', onUp);
-    }
-    function onMove(e){
-      if(e.touches) e.preventDefault();
-      const x = (e.touches? e.touches[0].clientX : e.clientX);
-      const dx = x - startX;
-      const nw = Math.max(60, startW + dx);
-      el.style.width = nw + 'px';
-    }
-    function onUp(){ window.removeEventListener('mousemove', onMove); window.removeEventListener('touchmove', onMove); }
-    handle.addEventListener('mousedown', onDown);
-    handle.addEventListener('touchstart', onDown, {passive:false});
-  }
-
-  // Initial overlay element
-  const demoOverlay = $('#overlay');
-  enableDrag(demoOverlay);
-  enableResize($('#handleBR'), demoOverlay);
-  selectOverlay(demoOverlay);
-
-  addBtn.addEventListener('click', ()=>{
-    // Use the same demo source; replace with your catalog picker
-    createOverlay('https://images.unsplash.com/photo-1542219550-3814c5d0d8f7?q=80&w=800&auto=format&fit=crop');
-  });
-
-  flipBtn.addEventListener('click', ()=>{
-    if(!currentOverlay) return;
-    const img = currentOverlay.querySelector('img');
-    const flipped = img.style.transform?.includes('scaleX(-1)');
-    img.style.transform = `scaleX(${flipped ? '1':'-1'})`;
-  });
-
-  frontBtn.addEventListener('click', ()=> currentOverlay && (currentOverlay.style.zIndex = (parseInt(currentOverlay.style.zIndex||'1')+1)));
-  backBtn.addEventListener('click', ()=> currentOverlay && (currentOverlay.style.zIndex = (parseInt(currentOverlay.style.zIndex||'1')-1)));
-
-  opacityRange.addEventListener('input', (e)=>{
-    if(!currentOverlay) return;
-    const img = currentOverlay.querySelector('img');
-    img.style.opacity = (e.target.value/100).toString();
-  });
-
-  resetBtn.addEventListener('click', ()=>{
-    $$('.overlay').forEach(o=> o.remove());
-    const first = createOverlay('https://images.unsplash.com/photo-1542219550-3814c5d0d8f7?q=80&w=800&auto=format&fit=crop');
-    first.style.left = '50%'; first.style.top = '40%'; first.style.transform = 'translate(-50%,-50%)';
-  });
-
-  // Export: draw base + overlays to canvas and download
-  exportBtn.addEventListener('click', ()=>{
-    const rect = stage.getBoundingClientRect();
-    const canvas = document.createElement('canvas');
-    canvas.width = rect.width * devicePixelRatio;
-    canvas.height = rect.height * devicePixelRatio;
-    const ctx = canvas.getContext('2d');
-    ctx.scale(devicePixelRatio, devicePixelRatio);
-
-    function drawImageEl(img, dx, dy, dw, dh){
-      try{ ctx.drawImage(img, dx, dy, dw, dh); }catch(e){ console.warn('Export draw error', e) }
-    }
-
-    // base
-    const base = baseImg;
-    // fit base within stage (contain)
-    const sW = rect.width, sH = rect.height;
-    const ratio = Math.min(sW/base.naturalWidth, sH/base.naturalHeight);
-    const bW = base.naturalWidth * ratio, bH = base.naturalHeight * ratio;
-    const bX = (sW - bW)/2, bY = (sH - bH)/2;
-    drawImageEl(base, bX, bY, bW, bH);
-
-    // overlays in DOM order
-    $$('.overlay').forEach(ov=>{
-      const img = ov.querySelector('img');
-      const or = ov.getBoundingClientRect();
-      const sr = stage.getBoundingClientRect();
-      const x = or.left - sr.left;
-      const y = or.top - sr.top;
-      const w = or.width;
-      const h = or.height;
-
-      // handle flip transform
-      ctx.save();
-      const centerX = x + w/2;
-      ctx.translate(centerX, 0);
-      const flipped = (img.style.transform||'').includes('scaleX(-1)');
-      if(flipped){ ctx.scale(-1,1); }
-      ctx.globalAlpha = parseFloat(getComputedStyle(img).opacity||'1');
-      drawImageEl(img, flipped ? -w/2 : -w/2, y, w, h);
-      ctx.restore();
-    });
-
-    const a = document.createElement('a');
-    a.download = 'vto-export.png';
-    a.href = canvas.toDataURL('image/png');
-    a.click();
-  });
-
-  // Try AR (placeholder)
-  arBtn.addEventListener('click', ()=>{
-    alert('AR demo: replace this with your WebXR scene or app deep link.');
-    // TODO: integrate WebXR or open custom route
-  });
-
-  // Stage focus on overlay click
-  stage.addEventListener('mousedown', e=>{
-    const ov = e.target.closest('.overlay');
-    if(ov) selectOverlay(ov);
-  }, true);
-
-  /* Before/After slider interaction */
-  const range = $('#compareRange'), after = $('#afterImg');
-  function updateClip(){
-    const val = parseInt(range.value,10);
-    after.style.clipPath = `inset(0 ${100-val}% 0 0)`;
-  }
-  range.addEventListener('input', updateClip); updateClip();
-
-  /* Fun counters (animate values once in view) */
-  if (window.gsap && window.ScrollTrigger){
-    const counters = [{el:'#k1', val:0.9, suffix:'s', decimals:1},
-                      {el:'#k2', val:12, suffix:'ms', decimals:0},
-                      {el:'#k3', val:4, suffix:'K', decimals:0}];
-    counters.forEach(c=>{
-      const el = $(c.el);
-      gsap.fromTo({n:0}, {n:c.val, duration:1.2, ease:'power2',
-        onUpdate(){ el.textContent = c.decimals ? this.targets()[0].n.toFixed(c.decimals)+c.suffix : Math.round(this.targets()[0].n)+c.suffix; },
-        scrollTrigger:{trigger: el, start:'top 90%', once:true}
-      });
-    });
-  }
-
-  /* Accessibility: keyboard focus ring for overlays */
-  $$('.overlay').forEach(ov=>{
-    ov.tabIndex = 0;
-    ov.addEventListener('focus', ()=> selectOverlay(ov));
-  });
+  el.addEventListener("mousedown",down);
+  el.addEventListener("touchstart",down,{passive:false});
+}
 </script>
 </body>
 </html>
